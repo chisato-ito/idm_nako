@@ -1,0 +1,512 @@
+}
+# Step 7: Combine all the results into one dataframe
+merged_results_a <- bind_rows(resample_results_a) # anxiety
+merged_results_d <- bind_rows(resample_results_d) # depression
+View(merged_results_a)
+136/5
+27*2000
+a:d
+sample <- c(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t)
+sample <- c(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t)
+sample <- c("a","b","c","d","e","f","g","h","i","j","k",'l","m","n","o","p","q","s","t")
+sample <- c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","s","t")
+a
+x
+0
+)
+?seq()
+seq(1, length.out = 5)
+seq(1,1)
+seq(1,5)
+seq(1,1, by = 5)
+rep(1,5)
+group <- c(rep(1,5), rep(2,6), rep(3,8))
+sample <- c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","s","t")
+1.0, 0.3, 0.5, 1.7, 1.4
+wgt <- c(1.0, 0.3, 0.5, 1.7, 1.4, # Group 1 adds up to 5
+1.1, 1.4, 0.9, 0.7, 1.3, 0.6, # Group 2 adds up to 6
+1.2, 0.9, 1.5, 1.1, 0.6, 0.7, 1.0, 1.0) # Group 3 adds up to 8
+df <- data.frame(sample, group, wgt)
+df
+sum(df$wgt)
+sum(df$group == 2)
+sum(df$group == 1)
+sum(df$group == 3)
+sum(df$wgt[df$group == 1])
+sum(df$wgt[df$group == 2])
+sum(df$wgt[df$group == 3])
+sum(df$wgt[df$group == 1])
+wgt <- c(1.0, 0.3, 0.6, 1.7, 1.4, # Group 1 adds up to 5
+1.1, 1.4, 0.9, 0.7, 1.3, 0.6, # Group 2 adds up to 6
+1.2, 0.9, 1.5, 1.1, 0.6, 0.7, 1.0, 1.0) # Group 3 adds up to 8
+df <- data.frame(sample, group, wgt)
+df
+sum(df$wgt[df$group == 1])
+sum(df$wgt)
+n <- nrow(df)
+resample <- df[sample.int(n, n, replace = TRUE)]
+resample <- df[sample.int(n, n, replace = TRUE), ]
+View(df)
+resample
+grp_weights <- df %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt), na.rm = TRUE)
+library(tidyverse)
+grp_weights <- df %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt), na.rm = TRUE)
+grp_weights
+resample_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(resample_grp_wgt = sum(wgt), na.rm = TRUE)
+resample_grp_weights
+# Resample
+n <- nrow(df)
+resample <- df[sample.int(n, n, replace = TRUE), ]
+# Total wight per group in the new sample
+resample_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(resample_grp_wgt = sum(wgt), na.rm = TRUE)
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+View(resample)
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+library(tidyverse)
+# Create an example population
+sample <- c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","s","t")
+group <- c(rep(1,5), rep(2,6), rep(3,8))
+wgt <- c(1.0, 0.3, 0.6, 1.7, 1.4, # Group 1 adds up to 5
+1.1, 1.4, 0.9, 0.7, 1.3, 0.6, # Group 2 adds up to 6
+1.2, 0.9, 1.5, 1.1, 0.6, 0.7, 1.0, 1.0) # Group 3 adds up to 8
+df <- data.frame(sample, group, wgt)
+df
+sum(df$wgt)
+sum(df$wgt[df$group == 1])
+# Original weight per group
+grp_weights <- df %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt), na.rm = TRUE)
+# Resample
+n <- nrow(df)
+resample <- df[sample.int(n, n, replace = TRUE), ]
+# Total wight per group in the new sample
+resample_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(resample_grp_wgt = sum(wgt), na.rm = TRUE)
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group"))
+View(resample)
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+resample$grp_wgt
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+rlang::last_trace()
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt = wgt * (grp_wgt / resample_grp_wgt))
+library(tidyverse)
+# Create an example population
+sample <- c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","s","t")
+group <- c(rep(1,5), rep(2,6), rep(3,8))
+wgt <- c(1.0, 0.3, 0.6, 1.7, 1.4, # Group 1 adds up to 5
+1.1, 1.4, 0.9, 0.7, 1.3, 0.6, # Group 2 adds up to 6
+1.2, 0.9, 1.5, 1.1, 0.6, 0.7, 1.0, 1.0) # Group 3 adds up to 8
+df <- data.frame(sample, group, wgt)
+df
+sum(df$wgt)
+sum(df$wgt[df$group == 1])
+# Original weight per group
+grp_weights <- df %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt, na.rm = TRUE))
+# Resample
+n <- nrow(df)
+resample <- df[sample.int(n, n, replace = TRUE), ]
+View(grp_weights)
+# Total wight per group in the new sample
+resample_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(resample_grp_wgt = sum(wgt, na.rm = TRUE))
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+View(resample)
+library(tidyverse)
+# Create an example population
+sample <- c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","s","t")
+group <- c(rep(1,5), rep(2,6), rep(3,8))
+wgt <- c(1.0, 0.3, 0.6, 1.7, 1.4, # Group 1 adds up to 5
+1.1, 1.4, 0.9, 0.7, 1.3, 0.6, # Group 2 adds up to 6
+1.2, 0.9, 1.5, 1.1, 0.6, 0.7, 1.0, 1.0) # Group 3 adds up to 8
+df <- data.frame(sample, group, wgt)
+df
+sum(df$wgt)
+sum(df$wgt[df$group == 1])
+# Original weight per group
+grp_weights <- df %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt, na.rm = TRUE))
+View(grp_weights)
+# Resample
+n <- nrow(df)
+resample <- df[sample.int(n, n, replace = TRUE), ]
+# Total wight per group in the new sample
+resample_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(resample_grp_wgt = sum(wgt, na.rm = TRUE))
+View(resample_grp_weights)
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group"))
+View(resample)
+View(resample)
+# Check the adjusted weights
+adj_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt_, na.rm = TRUE))
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+# Check the adjusted weights
+adj_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt_, na.rm = TRUE))
+View(resample)
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+library(tidyverse)
+# Create an example population
+sample <- c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","s","t")
+group <- c(rep(1,5), rep(2,6), rep(3,8))
+wgt <- c(1.0, 0.3, 0.6, 1.7, 1.4, # Group 1 adds up to 5
+1.1, 1.4, 0.9, 0.7, 1.3, 0.6, # Group 2 adds up to 6
+1.2, 0.9, 1.5, 1.1, 0.6, 0.7, 1.0, 1.0) # Group 3 adds up to 8
+df <- data.frame(sample, group, wgt)
+df
+sum(df$wgt)
+sum(df$wgt[df$group == 1])
+# Original weight per group
+grp_weights <- df %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt, na.rm = TRUE))
+# Resample
+n <- nrow(df)
+resample <- df[sample.int(n, n, replace = TRUE), ]
+# Total wight per group in the new sample
+resample_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(resample_grp_wgt = sum(wgt, na.rm = TRUE))
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+# Check the adjusted weights
+adj_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt_, na.rm = TRUE))
+View(adj_grp_weights)
+View(grp_weights)
+View(adj_grp_weights)
+View(resample_grp_weights)
+View(adj_grp_weights)
+View(grp_weights)
+library(tidyverse)
+# Create an example population
+sample <- c("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","s","t")
+group <- c(rep(1,5), rep(2,6), rep(3,8))
+wgt <- c(1.0, 0.3, 0.6, 1.7, 1.4, # Group 1 adds up to 5
+1.1, 1.4, 0.9, 0.7, 1.3, 0.6, # Group 2 adds up to 6
+1.2, 0.9, 1.5, 1.1, 0.6, 0.7, 1.0, 1.0) # Group 3 adds up to 8
+df <- data.frame(sample, group, wgt)
+df
+sum(df$wgt)
+sum(df$wgt[df$group == 1])
+sum(df$wgt[df$group == 2])
+sum(df$wgt[df$group == 3])
+# Original weight per group
+grp_weights <- df %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt, na.rm = TRUE))
+grp_weights
+# Resample
+n <- nrow(df)
+resample <- df[sample.int(n, n, replace = TRUE), ]
+resample
+View(resample)
+resample <- df[sample.int(n, n, replace = TRUE), ]
+resample
+# Total wight per group in the new sample
+resample_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(resample_grp_wgt = sum(wgt, na.rm = TRUE))
+resample_grp_weights
+# Merge the original and resample stratum weights
+resample <- resample %>%
+left_join(grp_weights, by = c("group")) %>%
+left_join(resample_grp_weights, by = c("group")) %>%
+# Adjust weights so each group's total matches the original total
+mutate(wgt_ = wgt * (grp_wgt / resample_grp_wgt))
+resample
+# Check the adjusted weights
+adj_grp_weights <- resample %>%
+group_by(group) %>%
+summarise(grp_wgt = sum(wgt_, na.rm = TRUE))
+adj_grp_weights
+library(here)
+library(srvyr)
+library(dplyr)
+library(tidyr)
+# Step 1: Read in the cleaned up NAKO-837 data
+dat_w_all <- read.csv(here("out_data","df_nako_clean.csv"))
+dat_w_all <- dat_w_all %>%
+# create a new variable grouping years: 2014-2016 & 2017-2019
+mutate(basis_udat_y_tri = ifelse(basis_udat_y %in% c(2014, 2015, 2016), 2015,
+ifelse(basis_udat_y %in% c(2017, 2018, 2019), 2018, basis_udat_y))) %>%
+mutate(basis_sex = as.factor(basis_sex))
+# Step X: Compute the total sum of weights in the original dataset
+total_original_weight <- sum(dat_w_all$wgt_total_16sc, na.rm = TRUE)
+# Step 1: Read in the cleaned up NAKO-837 data
+dat_w_all <- read.csv(here("out_data","df_nako_clean.csv"))
+dat_w_all <- dat_w_all %>%
+# create a new variable grouping years: 2014-2016 & 2017-2019
+mutate(basis_udat_y_tri = ifelse(basis_udat_y %in% c(2014, 2015, 2016), 2015,
+ifelse(basis_udat_y %in% c(2017, 2018, 2019), 2018, basis_udat_y))) %>%
+mutate(basis_sex = as.factor(basis_sex))
+# Step 2: Create the survey design object with weights
+design <- dat_w_all %>%
+filter(!is.na(wgt_total_16sc)) %>%  # there are 59 participants without weights
+as_survey_design(weights = wgt_total_16sc, strata = wgt_geosc_16sc)
+# Step X: Compute the total sum of weights in the original dataset
+total_original_weight <- sum(dat_w_all$wgt_total_16sc, na.rm = TRUE)
+# Step 3: Compute the total weight for each study center in the original dataset
+sc_weights <- dat_w_all %>%
+group_by(wgt_geosc_16sc) %>%
+summarise(sc_original_wgt = sum(wgt_total_16sc, na.rm = TRUE), .groups = "drop")
+View(sc_weights)
+n <- nrow(dat_w_all)
+# Step 4: Resample the dataset with replacement
+#resample <- dat_w_all %>%
+#  sample_n(nrow(dat_w_all), replace = TRUE) # Use sample.int() instead?
+resample <- dat_w_all[sample.int(n, n, replace = TRUE), ] # this is faster
+View(resample)
+sc_resample_weights
+# Step 5: Resample the dataset with replacement
+#resample <- dat_w_all %>%
+#  sample_n(nrow(dat_w_all), replace = TRUE) # Use sample.int() instead?
+resample <- dat_w_all[sample.int(n, n, replace = TRUE), ] # this is faster
+# Step 6: Compute the total weight for each study centre in the ith sample
+sc_resample_weights <- resample %>%
+group_by(wgt_geosc_16sc) %>%
+summarise(sc_resample_wgt = sum(wgt_total_16sc, na.rm = TRUE)) #, .groups = "drop")
+sc_resample_weights
+# Step 7: Merge the original and new study centre weights
+resample <- resample %>%
+left_join(sc_weights, by = c("wgt_geosc_16sc")) %>%
+left_join(sc_resample_weights, by = c("wgt_geosc_16sc")) %>%
+mutate(
+# Step 8: Adjust weights so that each stratum's total matches the original dataset
+wgt_total_16sc_ = wgt_total_16sc * (sc_original_wgt / sc_resample_wgt))
+resample
+View(resample)
+# Step 7: Merge the original and new study centre weights
+resample <- resample %>%
+left_join(sc_weights, by = c("wgt_geosc_16sc")) %>%
+left_join(sc_resample_weights, by = c("wgt_geosc_16sc")) %>%
+mutate(
+# Step 8: Adjust weights so that each stratum's total matches the original dataset
+wgt_total_16sc = wgt_total_16sc * (sc_original_wgt / sc_resample_wgt))
+# Step 5: Resample the dataset with replacement
+#resample <- dat_w_all %>%
+#  sample_n(nrow(dat_w_all), replace = TRUE) # Use sample.int() instead?
+resample <- dat_w_all[sample.int(n, n, replace = TRUE), ] # this is faster
+# Step 6: Compute the total weight for each study centre in the ith sample
+sc_resample_weights <- resample %>%
+group_by(wgt_geosc_16sc) %>%
+summarise(sc_resample_wgt = sum(wgt_total_16sc, na.rm = TRUE)) #, .groups = "drop")
+# Step 7: Merge the original and new study centre weights
+resample <- resample %>%
+left_join(sc_weights, by = c("wgt_geosc_16sc")) %>%
+left_join(sc_resample_weights, by = c("wgt_geosc_16sc")) %>%
+mutate(
+# Step 8: Adjust weights so that each stratum's total matches the original dataset
+wgt_total_16sc = wgt_total_16sc * (sc_original_wgt / sc_resample_wgt))
+# check weights
+centers <- sort(unique(resample$wgt_geosc_16sc), na.last = TRUE)
+for (c in centers){
+print(sum(resample$wgt_total_16sc[resample$wgt_geosc_16sc == c], na.rm = TRUE))
+}
+View(sc_weights)
+# Step 9: Create a survey design object for the ith sample
+resample_design <- resample %>%
+filter(!is.na(wgt_total_16sc)) %>%
+as_survey_design(weights = wgt_total_16sc, strata = wgt_geosc_16sc)
+# Step 10a: Estimate the age- and sex-specific anxiety prevalence for the ith sample
+result_a <- resample_design %>%
+group_by(basis_udat_y_tri, basis_sex, basis_ageclass) %>%
+summarise(prev_a = survey_mean(a_emo_gad7_cut10, vartype = "ci", na.rm = TRUE)) %>%
+mutate(iteration = i)  # Add iteration number to the result
+library(here)
+library(srvyr)
+library(dplyr)
+library(tidyr)
+# Step 1: Read in the cleaned up NAKO-837 data
+dat_w_all <- read.csv(here("out_data","df_nako_clean.csv"))
+dat_w_all <- dat_w_all %>%
+# create a new variable grouping years: 2014-2016 & 2017-2019
+mutate(basis_udat_y_tri = ifelse(basis_udat_y %in% c(2014, 2015, 2016), 2015,
+ifelse(basis_udat_y %in% c(2017, 2018, 2019), 2018, basis_udat_y))) %>%
+mutate(basis_sex = as.factor(basis_sex))
+# Step 2: Create the survey design object with weights
+design <- dat_w_all %>%
+filter(!is.na(wgt_total_16sc)) %>%  # there are 59 participants without weights
+as_survey_design(weights = wgt_total_16sc, strata = wgt_geosc_16sc)
+# Step 3: Compute the total weight for each study center in the original dataset
+sc_weights <- dat_w_all %>%
+group_by(wgt_geosc_16sc) %>%
+summarise(sc_original_wgt = sum(wgt_total_16sc, na.rm = TRUE), .groups = "drop")
+# Step 4: Resample and repeat the analysis 1000 times
+n_iterations <- 5 # Ultimately we want 2000
+# Placeholder for the results
+resample_results_a <- list()
+resample_results_d <- list()
+# Perform resampling and analysis
+for (i in 1:n_iterations) {
+n <- nrow(dat_w_all)
+# Step 5: Resample the dataset with replacement
+#resample <- dat_w_all %>%
+#  sample_n(nrow(dat_w_all), replace = TRUE) # Use sample.int() instead?
+resample <- dat_w_all[sample.int(n, n, replace = TRUE), ] # this is faster
+# Step 6: Compute the total weight for each study centre in the ith sample
+sc_resample_weights <- resample %>%
+group_by(wgt_geosc_16sc) %>%
+summarise(sc_resample_wgt = sum(wgt_total_16sc, na.rm = TRUE)) #, .groups = "drop")
+# Step 7: Merge the original and new study centre weights
+resample <- resample %>%
+left_join(sc_weights, by = c("wgt_geosc_16sc")) %>%
+left_join(sc_resample_weights, by = c("wgt_geosc_16sc")) %>%
+mutate(
+# Step 8: Adjust weights so that each stratum's total matches the original dataset
+wgt_total_16sc = wgt_total_16sc * (sc_original_wgt / sc_resample_wgt))
+#) %>%
+#select(-sc_original_weight, -sc_resample_weight)  # Drop extra columns
+# Step 9: Create a survey design object for the ith sample
+resample_design <- resample %>%
+filter(!is.na(wgt_total_16sc)) %>%
+as_survey_design(weights = wgt_total_16sc, strata = wgt_geosc_16sc)
+# Step 10a: Estimate the age- and sex-specific anxiety prevalence for the ith sample
+result_a <- resample_design %>%
+group_by(basis_udat_y_tri, basis_sex, basis_ageclass) %>%
+summarise(prev_a = survey_mean(a_emo_gad7_cut10, vartype = "ci", na.rm = TRUE)) %>%
+mutate(iteration = i)  # Add iteration number to the result
+# Step 10b: Estimate the age- and sex-specific depression prevalence for the ith sample
+result_d <- resample_design %>%
+group_by(basis_udat_y_tri, basis_sex, basis_ageclass) %>%
+summarise(prev_d = survey_mean(a_emo_phq9_cut10, vartype = "ci", na.rm = TRUE)) %>%
+mutate(iteration = i)  # Add iteration number to the result
+# Store the result for the current iteration
+resample_results_a[[i]] <- result_a
+resample_results_d[[i]] <- result_d
+}
+# Step 11: Combine all the results into one dataframe
+merged_results_a <- bind_rows(resample_results_a) # anxiety
+merged_results_d <- bind_rows(resample_results_d) # depression
+merged_results_a %>%
+group_by(iteration, wgt_geosc_16sc) %>%
+summarise(sc_final_wgt = sum(wgt_total_16sc, na.rm = TRUE))
+heaad(merged_results_a)
+View(merged_results_a)
+View(resample_results_a)
+View(merged_results_a)
+?rapply()
+X <- list(list(a = pi, b = list(c = 1L)), d = "a test")
+X[[1]]
+X[1]
+rapply(X, sqrt, classes = "numeric", how = "replace")
+rm(list = ls())
+expit <- function(x){y<-exp(x); y/(1+y)}
+logit <- function(x){log(x/(1-x))}
+# approximated log of generalized mortality rate of German women in 2020
+fct_logm <- splinefun(x =     c(  .5,  1.5,   15,    25,    60,    80,  95, 100),
+y = log(c(3e-3, 1e-3, 9e-5, 19e-5, 45e-4, 35e-3, .28, .42)),
+method = "natural")
+# prevalence data (cross-sections for two years)
+p.data <- 1e-3*c(4.1, 16.4, 24.6, 22.7, 11.2,  1.5,  0.2,  0.01, # year 1: t = 10
+6.2, 21.4, 28.9, 27.2, 15.3,  2.5,  0.1,  0.02) # year 2: t = 20
+p.ages <- c(15+10*(0:7))
+p.df   <- data.frame(p = p.data, t = rep(c(10, 20), each = length(p.ages)), a = rep(p.ages, 2))
+# model fit
+mod.p  <- lm(logit(p) ~ poly(a,3) + t, data = p.df)
+fct_p <- function(t, a){
+return(expit(predict.lm(mod.p, newdata = data.frame(t = rep(t, length(a)), a = a))))
+}
+fct_dp <- function(t, a){
+return((fct_p(t+.001, a+.001) - fct_p(t-.001, a-.001))/.002)
+}
+#png("Prev.png", width = 2000, height = 1500, res = 200, pointsize = 24)
+matplot(.5 + 0:90, 1e3*fct_p(5, .5+0:90), type = "l", col = "red", las = 1,
+ylab = "Prevalence (per 1000)", xlab = "Age (years)")
+matplot(.5 + 0:90, 1e3*fct_p(0, .5+0:90), type = "l", add = TRUE, lty = 2, lwd = 2)
+legend("topleft", legend = c("Year 5", "Year 0"), lwd = c(1, 2),
+col = c("red", "black"), lty = c(1,2), bty = "n")
+#png("PrevDerivPrev.png", width = 3000, height = 1500, res = 200, pointsize = 24)
+par(mfrow = c(1, 2), las = 1)
+matplot(.5 + 0:90, 1e3*fct_p(2.5, .5+0:90), type = "l", col = "red",
+ylab = expression(paste("Prevalence ", italic(p), " (per 1000)")), xlab = "Age (years)")
+matplot(.5 + 0:90, 1e3*fct_p(2.5, .5+0:90), type = "l", col = "black", lty = 2, add = TRUE)
+matplot(.5 + 0:90, 1e4*fct_dp(2.5, .5+0:90), type = "l", col = "blue",
+las = 1, ylab = expression(paste("Derivative ", partialdiff, italic(p), " (per 10,000)")), xlab = "Age (years)")
+fct_i <- function(beta1 = 15e-4, beta2 = 25, beta3 = 10){
+return(beta1*exp(-0.5*((age-beta2)/beta3)^2))
+}
+fct_r <- function(beta1 = 5e-5, beta2 = 55, beta3 = 5){
+return(beta1*exp(-0.5*((age-beta2)/beta3)^2))
+}
+# mortality rate ratio from Danish ICD register (see shiny)
+fct_R <- function(a){ return(exp(approx(c(7.5, 50), c(log(10), 0), xout = a, rule = 2)$y)) }
+age <- .5+0:90
+MRR <- fct_R(age)
+dp_ <- fct_dp(2.5, age)
+p_  <- fct_p (2.5, age)
+m_  <- exp(fct_logm(age))
+fct_target <- function(x){
+rhs_ <- (1-p_)*(fct_i(x[1],x[2],x[3]) - m_*p_*(MRR-1)/(1+p_*(MRR-1))) - fct_r(x[4],x[5],x[6])*p_
+return(sum( (dp_ - (rhs_))^2))
+}
+x0 <- c(0.0002,30,10,0.0002,55,10)
+optim_res <- optim(x0, fct_target, control = list(maxit = 5000),
+hessian = TRUE)
+optim_res$par
