@@ -15,14 +15,14 @@ expit <- function(x){y<-exp(x); y/(1+y)}
 # Fit a prevalence model
 # Dataframe p.df is the weighted NAKO prevalence data, but some of the variables
 # are renamed (a = age, t = time, sx = sex, sc = study center)
-mod.p_a  <- lm(logit(p) ~ (I(a^2) + a) + t + sx + as.factor(sc), data = p.df, 
+mod.p_a  <- lm(logit(p) ~ (I(a^3) + I(a^2) + a) + t + sx + as.factor(sc), data = p.df, 
                subset = (p > 0 & p < 1))
 summary(mod.p_a)
 
-# The following is hard coded with Augsburg (center 11) as a reference for code 
-# sharing purposes
+# The following is hard coded for the reference center (Augsburg: center 11) for 
+# code-sharing and reproducibility purposes.
 fct_p_a <- function(t, a, sx){
-  logitP <- -10.84  -1.034e-03*a^2+ 6.991e-02*a + 3.193e-03*t + 4.393e-01*sx
+  logitP <- -9.30  -8.354e-06*a^3 + 7.277e-05*a^2 + 2.491e-02*a + 2.699e-03*t + 4.439e-01*sx
   return(expit(logitP))
 }
 
@@ -34,17 +34,17 @@ fct_dp_a <- function(t, a, sx){
 sex <- 1 # 1: Men; 2: Women
 year <- 2015 # 2018
 
-matplot(ages, 1e3*fct_p_a(year, ages, sex, c), type = "l", lty = 2, 
+matplot(ages, 1e3*fct_p_a(year, ages, sex), type = "l", lty = 2, 
         col = "#A01A9CFF",
-        ylim = c(0, 200), main = paste(sex,"-",year,": Center", c), 
+        ylim = c(0, 200), main = paste(sex,"-",year), 
         xlab = "Age (years)", ylab = "Prevalence (per 1000)")
-with(p.df, matplot(a[t == year & sx == sex & sc == c],
-                   1e3*p[t == year & sx == sex & sc == c], type = "p", 
+with(p.df, matplot(a[t == year & sx == sex],
+                   1e3*p[t == year & sx == sex], type = "p", 
                    col = "#B52F8CFF", pch = 4, add = TRUE))
 for (ii in 1:length(unique(p.df$a))) {
-  aa <- (p.df$a    [p.df$t == year & p.df$sx == sex & p.df$sc == c]) [ii]
-  up <- (p.df$p_upp[p.df$t == year & p.df$sx == sex & p.df$sc == c]) [ii]
-  lw <- (p.df$p_low[p.df$t == year & p.df$sx == sex & p.df$sc == c]) [ii]
+  aa <- (p.df$a    [p.df$t == year & p.df$sx == sex]) [ii]
+  up <- (p.df$p_upp[p.df$t == year & p.df$sx == sex]) [ii]
+  lw <- (p.df$p_low[p.df$t == year & p.df$sx == sex]) [ii]
   lines(rep(aa,2), 1e3*c(lw,up), col = "#B52F8CFF")
 }
 
